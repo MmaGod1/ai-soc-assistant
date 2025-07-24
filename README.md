@@ -298,10 +298,10 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 ```
 
+```
 # Skip certain protocols
 IGNORE_PROTOCOLS = {"ARP", "SSDP", "ICMP", "NBNS", "MDNS", "DHCP"}
 ```
-
 
 ## 🙏 Acknowledgments
 
