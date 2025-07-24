@@ -19,4 +19,3 @@ if uploaded_file:
             response = ask_ai(prompt)
             st.success("Analysis complete!")
             st.markdown(response)
-

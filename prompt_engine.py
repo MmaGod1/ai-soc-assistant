@@ -12,9 +12,10 @@ client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     default_headers={
         "HTTP-Referer": "https://yourprojectname.com",  # Optional
-        "X-Title": "PCAP Forensics Assistant"           # Optional
-    }
+        "X-Title": "PCAP Forensics Assistant",  # Optional
+    },
 )
+
 
 def build_prompt(events):
     if not events:
@@ -44,14 +45,32 @@ def build_prompt(events):
 
         # Heuristic suspicious detection
         info_lower = evt.get("Info", "").lower()
-        if (
-            any(keyword in info_lower for keyword in [
-                "authenticator", "login", "token", ".exe", "google", "download",
-                "setup", "security", "password", "verify", "patch", "update", '.zip',
-                '.xyz', '.click', '.lol', 'secure', '.scr', '.bat', '.jar', '.vbs'
-                ])
-            or evt.get("LDAP Malformed")
-        ):
+        if any(
+            keyword in info_lower
+            for keyword in [
+                "authenticator",
+                "login",
+                "token",
+                ".exe",
+                "google",
+                "download",
+                "setup",
+                "security",
+                "password",
+                "verify",
+                "patch",
+                "update",
+                ".zip",
+                ".xyz",
+                ".click",
+                ".lol",
+                "secure",
+                ".scr",
+                ".bat",
+                ".jar",
+                ".vbs",
+            ]
+        ) or evt.get("LDAP Malformed"):
             suspicious_packets.append(evt)
 
         # Build timeline entry with new fields
@@ -96,7 +115,8 @@ def build_prompt(events):
 
     # Suspicious packet overview
     suspicious_summary = "\n".join(
-        f"[#{pkt['No']}] {pkt.get('Protocol')} ➤ {pkt.get('Info')[:150]}..." for pkt in suspicious_packets
+        f"[#{pkt['No']}] {pkt.get('Protocol')} ➤ {pkt.get('Info')[:150]}..."
+        for pkt in suspicious_packets
     )
 
     return (
@@ -119,16 +139,20 @@ def build_prompt(events):
         f"{timeline}"
     )
 
+
 def ask_ai(prompt):
     try:
         response = client.chat.completions.create(
             model="deepseek/deepseek-r1-0528:free",
             messages=[
-                {"role": "system", "content": "You are a SOC analyst skilled at detecting malicious activity in network logs."},
-                {"role": "user", "content": prompt}
+                {
+                    "role": "system",
+                    "content": "You are a SOC analyst skilled at detecting malicious activity in network logs.",
+                },
+                {"role": "user", "content": prompt},
             ],
             temperature=0.3,
-            max_tokens=6000
+            max_tokens=6000,
         )
 
         if response and response.choices:
@@ -138,4 +162,3 @@ def ask_ai(prompt):
 
     except Exception as e:
         return f"[ERROR] Exception during AI request: {e}"
-
