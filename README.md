@@ -117,7 +117,7 @@ API_MODEL=deepseek/deepseek-r1-0528:free
 2. Create an account and navigate to the API section
 3. Generate a new API key
 4. Copy the key to your `.env` file
-✅ Note: I used the DeepSeek R1 Free model on OpenRouter.ai.
+5. ✅ Note: I used the DeepSeek R1 Free model on OpenRouter.ai.
 
 ### 2. File Structure
 
