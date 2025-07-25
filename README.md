@@ -93,9 +93,6 @@ requests==2.31.0
 ```
 
 ```bash
-# Install development dependencies
-pip install -r requirements-dev.txt
-
 # Code formatting
 black *.py
 flake8 *.py
